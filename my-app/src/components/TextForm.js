@@ -16,10 +16,8 @@ export default function TextForm(props) {
     setText("");
   };
   const handleCopy = () => {
-    let text = document.getElementById("myBox");
-    text.select();
-    navigator.clipboard.writeText(text.value);
-    document.getSelection().removeAllRanges();
+    navigator.clipboard.writeText(text);
+    // document.getSelection().removeAllRanges();
     props.showAlert("Copied to clipboard.", "success") ;
   };
   const handleExtraSpace = () => {
