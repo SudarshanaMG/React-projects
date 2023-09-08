@@ -10,12 +10,14 @@ export class News extends Component {
     country: 'in',
     pageSize: 21,
     category: 'general',
+    title: 'Top Headlines'
   }
 
   static propTypes = {
     country: PropTypes.string,
     pageSize: PropTypes.number,
     category: PropTypes.string,
+    title: PropTypes.string,
   }
 
   constructor(){
@@ -71,7 +73,7 @@ export class News extends Component {
   render() {
     return (
       <div className='container my-3'>
-        <h1 className='text-center'>Top Headlines</h1>
+        <h1 className='text-center'>{this.props.title}</h1>
         {this.state.loading && <Spinner />}
         <div className="row my-3">
           {!this.state.loading && this.state.articles.map((element)=>{
