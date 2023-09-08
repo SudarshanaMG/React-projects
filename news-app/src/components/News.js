@@ -1,55 +1,88 @@
 import React, { Component } from 'react'
 import NewsItem from './NewsItem'
+import Spinner from './Spinner';
+import PropTypes from 'prop-types'
+
 
 export class News extends Component {
-  articles = [
-    {
-      "source": {
-        "id": null,
-        "name": "NDTV News"
-      },
-      "author": "NDTV Sports Desk",
-      "title": "Pakistan vs Bangladesh Live Score, Asia Cup 2023 Super 4: Haris Rauf Takes 2 Wickets, Bangladesh Go 4 Down vs Pakistan - NDTV Sports",
-      "description": "PAK Vs BAN Asia Live Cricket Score: Bangladesh are four wickets down against Pakistan in their Asia Cup Super Four clash at the Gaddafi Stadium in Lahore.",
-      "url": "https://sports.ndtv.com/asia-cup-2023/pakistan-vs-bangladesh-live-score-asia-cup-2023-super-4-today-match-live-pak-vs-ban-latest-updates-4364069",
-      "urlToImage": "https://c.ndtvimg.com/2023-09/quoiom4g_mohammad-naim-afp_625x300_06_September_23.jpg?im=FeatureCrop,algorithm=dnn,width=1200,height=675",
-      "publishedAt": "2023-09-06T10:15:55Z",
-      "content": "PAK Vs BAN Asia Live Cricket Score: Bangladesh are four wickets down against Pakistan in their Asia Cup Super Four clash at the Gaddafi Stadium in Lahore. Currently, Shakib Al Hasan and Mushfiqur Rah… [+387 chars]"
-    },
-    {
-      "source": {
-        "id": "the-times-of-india",
-        "name": "The Times of India"
-      },
-      "author": "TOI Sports Desk",
-      "title": "India's 2023 ODI World Cup squad: Did selectors decide to play it safe? - Times of India",
-      "description": "Cricket News: Captain Rohit Sharma and Chief selector Ajit Agarkar's press conference on Tuesday in Sri Lanka where they announced the 15 member provisional squad f",
-      "url": "https://timesofindia.indiatimes.com/sports/cricket/icc-world-cup/indias-2023-odi-world-cup-squad-did-selectors-decide-to-play-it-safe/articleshow/103428865.cms",
-      "urlToImage": "https://static.toiimg.com/thumb/msid-103428865,width-1070,height-580,imgsize-109264,resizemode-75,overlay-toi_sw,pt-32,y_pad-40/photo.jpg",
-      "publishedAt": "2023-09-06T09:47:00Z",
-      "content": "World Cup 2023 | India Names 15-Member Squad For ODI World Cup, Tilak And Prasidh Dropped"
-    }
-  ]
+
+  static defaultProps = {
+    country: 'in',
+    pageSize: 21,
+    category: 'general',
+  }
+
+  static propTypes = {
+    country: PropTypes.string,
+    pageSize: PropTypes.number,
+    category: PropTypes.string,
+  }
 
   constructor(){
     super();
-    console.log('This is constructor from news component');
+    // console.log('This is constructor from news component');
     this.state = {
-      articles: this.articles,
-      loading:false
+      articles: [],
+      loading:false,
+      page:1
+    }
+  }
+
+  async componentDidMount(){
+    // console.log("componentDidMount");
+    let url = `https://newsapi.org/v2/top-headlines?category=${this.props.category}&country=${this.props.country}&apiKey=03d61486bfa240a98b5130c2f1cfa30e&page=1&pageSize=${this.props.pageSize}`;
+    this.setState({loading: true});
+    let data = await fetch(url);
+    let parsedData = await data.json();
+    // console.log(parsedData);
+    this.setState({
+      articles : parsedData.articles,
+      totalResults: parsedData.totalResults,
+      loading: false
+    })
+  }
+
+  handlePrevClick = async() =>{
+    let url = `https://newsapi.org/v2/top-headlines?category=${this.props.category}&country=${this.props.country}&apiKey=03d61486bfa240a98b5130c2f1cfa30e&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`;
+    this.setState({loading: true});
+    let data = await fetch(url);
+    let parsedData = await data.json();
+    this.setState({
+      articles : parsedData.articles,
+      page: this.state.page -1,
+      loading: false
+    })
+  }
+  handleNextClick = async() =>{
+    if(!(this.state.page + 1 > Math.ceil(this.state.totalResults/this.props.pageSize)))
+    {
+      let url = `https://newsapi.org/v2/top-headlines?category=${this.props.category}&country=${this.props.country}&apiKey=03d61486bfa240a98b5130c2f1cfa30e&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
+      this.setState({loading: true});
+      let data = await fetch(url);
+      let parsedData = await data.json();
+      this.setState({
+        articles : parsedData.articles,
+        page: this.state.page + 1,
+        loading: false
+      })    
     }
   }
 
   render() {
     return (
       <div className='container my-3'>
-        <h2>Top Headlines</h2>
+        <h1 className='text-center'>Top Headlines</h1>
+        {this.state.loading && <Spinner />}
         <div className="row my-3">
-          {this.state.articles.map((element)=>{
+          {!this.state.loading && this.state.articles.map((element)=>{
             return <div className="col-md-4" key={element.url}>
-                <NewsItem title={element.title.slice(0,50)} description={element.description.slice(0,100)} newsUrl={element.url} imageUrl={element.urlToImage} />
+                <NewsItem title={element.title?element.title:""} description={element.description?element.description:""} newsUrl={element.url} imageUrl={element.urlToImage} />
             </div>
           })}
+        </div>
+        <div className="container d-flex justify-content-around">
+        <button disabled={this.state.page<=1} type="button" className="btn btn-dark" onClick={this.handlePrevClick}>&larr; Previous</button>
+        <button disabled={this.state.page + 1 > Math.ceil(this.state.totalResults/this.props.pageSize)} type="button" className="btn btn-dark" onClick={this.handleNextClick}>Next &rarr;</button>
         </div>
       </div>
      
