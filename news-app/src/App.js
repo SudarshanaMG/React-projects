@@ -2,6 +2,7 @@ import './App.css';
 import React, { Component } from 'react'
 import Navbar from './components/Navbar';
 import News from './components/News';
+import index from './index.css'
 import {
   BrowserRouter as Router,
   Routes,
@@ -12,7 +13,7 @@ export default class App extends Component {
 
   render() {
     return (
-      <div style={{backgroundColor: '#EAF1FB',overflow:'hidden'}}>
+      <div style={index}>
         <Router>
         <Navbar />
         <Routes>
