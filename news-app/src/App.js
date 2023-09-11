@@ -16,7 +16,9 @@ export default class App extends Component {
  state = {
   progress: 0
  }
- 
+ setProgress = (progress)=>{
+  this.setState({progress: progress})
+ }
   render() {
     return (
       <div style={index}>
@@ -24,23 +26,25 @@ export default class App extends Component {
         <Navbar />
         <LoadingBar
         height={3}
+        loaderSpeed={100}
+        waitingTime={500}
         color='#f11946'
-        progress={10}
+        progress={this.state.progress}
       />
         <Routes>
-          <Route exact path="/" element={ <News key='general'  pageSize={21} apiKey={this.apiKey} category='general'/>}>
+          <Route exact path="/" element={ <News key='general'  pageSize={21} setProgress={this.setProgress} apiKey={this.apiKey} category='general'/>}>
           </Route>
-          <Route exact path="/business" element={ <News key='business'  pageSize={21} apiKey={this.apiKey} category='business'/>}>
+          <Route exact path="/business" element={ <News key='business'  pageSize={21} setProgress={this.setProgress} apiKey={this.apiKey} category='business'/>}>
           </Route>
-          <Route exact path="/technology" element={ <News key='technology'   pageSize={21} apiKey={this.apiKey} category='technology'/>}>
+          <Route exact path="/technology" element={ <News key='technology'   pageSize={21} setProgress={this.setProgress} apiKey={this.apiKey} category='technology'/>}>
           </Route>
-          <Route exact path="/sports" element={ <News key='sports'  pageSize={21} apiKey={this.apiKey} category='sports'/>}>
+          <Route exact path="/sports" element={ <News key='sports'  pageSize={21} setProgress={this.setProgress} apiKey={this.apiKey} category='sports'/>}>
           </Route>
-          <Route exact path="/science" element={ <News key='science'  pageSize={21} apiKey={this.apiKey} category='science'/>}>
+          <Route exact path="/science" element={ <News key='science'  pageSize={21} setProgress={this.setProgress} apiKey={this.apiKey} category='science'/>}>
           </Route>
-          <Route exact path="/health" element={ <News key='health'  pageSize={21} apiKey={this.apiKey} category='health'/>}>
+          <Route exact path="/health" element={ <News key='health'  pageSize={21} setProgress={this.setProgress} apiKey={this.apiKey} category='health'/>}>
           </Route>
-          <Route exact path="/entertainment" element={ <News key='entertainment'  pageSize={21} apiKey={this.apiKey} category='entertainment'/>}>
+          <Route exact path="/entertainment" element={ <News key='entertainment'  pageSize={21} setProgress={this.setProgress} apiKey={this.apiKey} category='entertainment'/>}>
           </Route>
         </Routes>
         </Router>
