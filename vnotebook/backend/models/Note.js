@@ -2,13 +2,17 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const NotesSchema = new Schema({
+    user:{
+        type : mongoose.Schema.Types.ObjectId,
+        ref : 'user'
+    },
     title:{
-        type:String,
-        required:[true,'Please add a Title']
+        type : String,
+        required : [true,'Please add a Title']
     },
     description:{
         type : String ,
-        required  : [true ,'please enter description']
+        required : [true ,'please enter description']
         },
     tag:{
         type : String ,
