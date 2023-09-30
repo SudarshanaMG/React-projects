@@ -4,11 +4,11 @@ const { Schema } = mongoose;
 const NotesSchema = new Schema({
     title:{
         type:String,
-        required:[true,'Please add a Name']
+        required:[true,'Please add a Title']
     },
     description:{
         type : String ,
-        required  : [true ,'please enter an Email']
+        required  : [true ,'please enter description']
         },
     tag:{
         type : String ,

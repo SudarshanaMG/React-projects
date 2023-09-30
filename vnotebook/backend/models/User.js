@@ -7,8 +7,7 @@ const UserSchema = new Schema({
         required:[true,'Please add a Name']
     },
     email:{
-        type : String , 
-        unique : true ,
+        type : String ,
         required  : [true ,'please enter an Email']
         },
     password:{
@@ -21,5 +20,4 @@ const UserSchema = new Schema({
     }
   });
 const User = mongoose.model('user', UserSchema);
-User.createIndexes();
 module.exports = User
