@@ -16,16 +16,19 @@ const Noteitem = (props) => {
                     <h5 className="card-title">{note.title}</h5>
                     <p className="card-text">{note.description}</p>
                     <div className="d-flex justify-content-between">
-                    <button className="edit-button" onClick={()=>{updateNotes(note)}}>
-                        <svg className="edit-svgIcon" viewBox="0 0 512 512">
-                            <path d={editbtn} ></path>
-                        </svg>
-                    </button>
-                    <button className="delete-button" onClick={()=>{deleteNote(note._id)}}>
-                        <svg className="delete-svgIcon" viewBox="0 0 448 512">
-                            <path d={deletebtn} ></path>
-                        </svg>
-                    </button>
+                        <button className="edit-button" onClick={() => { updateNotes(note) }}>
+                            <svg className="edit-svgIcon" viewBox="0 0 512 512">
+                                <path d={editbtn} ></path>
+                            </svg>
+                        </button>
+                        <button className="delete-button" onClick={() => {
+                            deleteNote(note._id);
+                            props.showAlert("Note deleted successfully", "success");
+                        }}>
+                            <svg className="delete-svgIcon" viewBox="0 0 448 512">
+                                <path d={deletebtn} ></path>
+                            </svg>
+                        </button>
                     </div>
                 </div>
             </div>
