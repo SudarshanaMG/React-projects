@@ -2,33 +2,39 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import noteContext from '../context/notes/noteContext'
 import Noteitem from './Noteitem';
 import AddNote from './AddNote';
+import { useNavigate } from 'react-router-dom';
 
 const Notes = (props) => {
+  let navigate = useNavigate();
   const context = useContext(noteContext);
   const { notes, getNotes, editNote } = context;
-  const [note, setNote] = useState({id:"", etitle: "", edescription: "", etag: "" })
+  const [note, setNote] = useState({ id: "", etitle: "", edescription: "", etag: "" })
   const refOpen = useRef(null);
   const refClose = useRef(null);
   useEffect(() => {
-    getNotes();
+    if (localStorage.getItem('token')) {
+      getNotes();
+    } else {
+      navigate("/login");
+    }
     // eslint-disable-next-line
   }, [])
   const handleSubmit = () => {
     editNote(note.id, note.etitle, note.edescription, note.etag);
     refClose.current.click();
     props.showAlert("Note updated successfully", "success");
-}
-const onChange = (e) => {
+  }
+  const onChange = (e) => {
     setNote({ ...note, [e.target.name]: e.target.value })
-}
+  }
   const updateNotes = (currentNote) => {
     //  console.log(refName.current);
     refOpen.current.click();
-    setNote({id:currentNote._id, etitle:currentNote.title, edescription:currentNote.description, etag:currentNote.tag})
+    setNote({ id: currentNote._id, etitle: currentNote.title, edescription: currentNote.description, etag: currentNote.tag })
   }
   return (
     <>
-      <AddNote showAlert={props.showAlert}/>
+      <AddNote showAlert={props.showAlert} />
       <button ref={refOpen} type="button" className="btn btn-primary d-none" data-toggle="modal" data-target="#exampleModal">
         update note
       </button>
@@ -42,24 +48,24 @@ const onChange = (e) => {
               </button>
             </div>
             <div className="modal-body">
-            <form className='my-3'>
+              <form className='my-3'>
                 <div className="mb-3">
-                    <label htmlFor="etitle" className="form-label">Title</label>
-                    <input type="text" className="form-control" autoComplete="etitle" id="etitle" name="etitle" value={note.etitle || ''} onChange={onChange} />
+                  <label htmlFor="etitle" className="form-label">Title</label>
+                  <input type="text" className="form-control" autoComplete="etitle" id="etitle" name="etitle" value={note.etitle || ''} onChange={onChange} />
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="edescription" className="form-label">Description</label>
-                    <input type="text" className="form-control" autoComplete="edescription" id="edescription" name="edescription" value={note.edescription || ''} onChange={onChange} />
+                  <label htmlFor="edescription" className="form-label">Description</label>
+                  <input type="text" className="form-control" autoComplete="edescription" id="edescription" name="edescription" value={note.edescription || ''} onChange={onChange} />
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="etag" className="form-label">Tag</label>
-                    <input type="text" className="form-control" autoComplete="etag" id="etag" name="etag" value={note.etag || ''} onChange={onChange} />
+                  <label htmlFor="etag" className="form-label">Tag</label>
+                  <input type="text" className="form-control" autoComplete="etag" id="etag" name="etag" value={note.etag || ''} onChange={onChange} />
                 </div>
-            </form>
+              </form>
             </div>
             <div className="modal-footer">
               <button type="button" ref={refClose} className="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button disabled={note.etitle.length<3 || note.edescription.length<5} type="submit" className="btn btn-primary" onClick={handleSubmit}>Save changes</button>
+              <button disabled={note.etitle.length < 3 || note.edescription.length < 5} type="submit" className="btn btn-primary" onClick={handleSubmit}>Save changes</button>
             </div>
           </div>
         </div>
@@ -67,7 +73,7 @@ const onChange = (e) => {
       <div className="row my-3">
         <h2>Your note</h2>
         <div className="container">
-          {notes.length===0 && 'No Notes to display'}
+          {notes.length === 0 && 'No Notes to display'}
         </div>
         {notes.map((note) => {
           return <Noteitem showAlert={props.showAlert} key={note._id} updateNotes={updateNotes} note={note} />

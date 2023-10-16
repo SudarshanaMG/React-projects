@@ -10,7 +10,7 @@ import Login from "./components/Login";
 import { useState } from "react";
 
 function App() {
-  const [alert, setAlert] = useState({ msg: "", type: "" });
+  const [alert, setAlert] = useState(null);
 
   const showAlert = (message, type) => {
     setAlert({

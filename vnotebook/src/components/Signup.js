@@ -19,9 +19,9 @@ const Signup = (props) => {
         });
       const json = await response.json();
       console.log(json);
-        localStorage.setItem('token', json.authtoken);
-        navigate("/login");
-        props.showAlert("User created successfully", "success");
+        localStorage.setItem('token', json.authToken);
+        navigate("/");
+        props.showAlert("Account created successfully", "success");
     } else {
       props.showAlert("Please Confirm your password correctly", "danger");
     }
